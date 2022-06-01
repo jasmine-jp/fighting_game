@@ -13,7 +13,7 @@ class Player:
         self.keys = keys
     
     def update(self):
-        conds = list(map(lambda x: pyxel.btnp(x), self.keys[:2])) + \
+        self.conds = list(map(lambda x: pyxel.btnp(x), self.keys[:2])) + \
             list(map(lambda x: pyxel.btn(x), self.keys[2:]))
         pos_elements = [
             np.array([0, -1]),
@@ -21,10 +21,15 @@ class Player:
             self.common.rightmove(self.pos[0] != self.max_x),
             self.common.leftmove(self.pos[0] != 0)
         ]
-        self.pos += sum(map(lambda c, p: p if c else np.array([0, 0]), conds, pos_elements))
+        self.diff = sum(map(lambda c, p: p if c else np.array([0, 0]), self.conds, pos_elements))
+        self.pos += self.diff
         
     
     def draw(self):
-        u, v = self.load.body[0][1]
+        if any(self.conds) and not np.array_equal(self.diff, np.array([0, 0])):
+            row, num = 0, self.conds.index(True)
+        else:
+            row, num = 1, 0
+        u, v = self.load.body[row][num]
         bodynum, bodysize = self.load.bodynum, self.load.bodysize
         pyxel.blt(self.pos[0], self.pos[1], bodynum, u, v, bodysize, bodysize, 0)
