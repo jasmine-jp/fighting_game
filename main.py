@@ -6,23 +6,23 @@ pyxel.init(window_x, window_y)
 
 player1 = Player(
     (window_x, window_y),
-    [0, 0],
+    [0, window_y-20],
     [
         pyxel.KEY_E,
         pyxel.KEY_X,
-        pyxel.KEY_S,
-        pyxel.KEY_F
+        pyxel.KEY_F,
+        pyxel.KEY_S
     ]
 )
 
 player2 = Player(
     (window_x, window_y),
-    [window_x-20, 0],
+    [window_x-20, window_y-20],
     [
         pyxel.KEY_I,
         pyxel.KEY_M,
-        pyxel.KEY_J,
-        pyxel.KEY_L
+        pyxel.KEY_L,
+        pyxel.KEY_J
     ]
 )
 
