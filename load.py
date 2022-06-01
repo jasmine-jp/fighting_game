@@ -7,4 +7,6 @@ class Load:
             [[i*16, 0] for i in range(4)],
             [[i*16, 16] for i in range(3)]
         ]
+        self.bodysize = 16
+
         pyxel.load('./src/resource.pyxres')

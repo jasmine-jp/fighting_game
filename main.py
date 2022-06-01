@@ -1,12 +1,13 @@
 import pyxel
 from player import Player
 
-window_x, window_y = 160, 120
-pyxel.init(window_x, window_y)
+from common import Common
+
+common = Common()
+pyxel.init(common.window_x, common.window_y)
 
 player1 = Player(
-    (window_x, window_y),
-    [0, window_y-20],
+    [0, common.window_y-20],
     [
         pyxel.KEY_E,
         pyxel.KEY_X,
@@ -16,8 +17,7 @@ player1 = Player(
 )
 
 player2 = Player(
-    (window_x, window_y),
-    [window_x-20, window_y-20],
+    [common.window_x-20, common.window_y-20],
     [
         pyxel.KEY_I,
         pyxel.KEY_M,
