@@ -14,9 +14,3 @@ class Common:
 
     def fall(self):
         return np.array([0, 1])
-    
-    def guard(self):
-        return
-
-    def attack(self):
-        return

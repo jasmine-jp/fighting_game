@@ -17,17 +17,19 @@ class Player:
         self.hitbox = np.array([self.load.bodysize, -self.load.bodysize])+self.pos
         self.upperleft = np.array([self.pos[0], self.hitbox[1]])
         self.lowerright = np.array([self.hitbox[0], self.pos[1]])
+        self.jumpflame = 0
     
     def update(self, opponent):
         self.movekey = list(map(lambda x: pyxel.btn(x), self.keys[:3]))+[self.pos[1] < self.max_y]
         self.commandkey = [pyxel.btn(self.keys[3]), pyxel.btnp(self.keys[4]), True]
+        if pyxel.btnp(self.keys[0]):
+            self.jumpflame = pyxel.frame_count
+        self.movekey[0] = self.movekey[0] and pyxel.frame_count - self.jumpflame < 75
         pos_elements = [
             self.common.jump(self.pos[1] > self.max_y-self.max_jumpheight),
             self.common.rightmove(self.pos[0] != self.max_x),
             self.common.leftmove(self.pos[0] != 0),
-            self.common.fall(),
-            self.common.guard(),
-            self.common.attack()
+            self.common.fall()
         ]
         self.diff = sum(map(lambda c, p: p if c else np.array([0, 0]), self.movekey, pos_elements))
         self.pos += self.diff
