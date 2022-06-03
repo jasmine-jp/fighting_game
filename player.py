@@ -9,7 +9,7 @@ class Player:
         self.load = Load()
         self.common = Common()
         self.pos = np.array(first_pos)
-        self.max_x, self.max_y = np.array([self.common.window_x, self.common.window_y])-20
+        self.max_x, self.max_y = np.array([self.common.window_x, self.common.window_y])-self.load.bodysize
         self.keys = keys
         self.max_jumpheight = self.load.bodysize*2
     
@@ -20,10 +20,11 @@ class Player:
             self.common.jump(self.pos[1] > self.max_y-self.max_jumpheight),
             self.common.rightmove(self.pos[0] != self.max_x),
             self.common.leftmove(self.pos[0] != 0),
+            self.common.fall(self.pos[1] < self.max_y),
             self.common.guard(),
             self.common.attack()
         ]
-        self.diff = sum(map(lambda c, p: p if c else np.array([0, 0]), self.movekey, pos_elements))
+        self.diff = sum(map(lambda c, p: p if c else np.array([0, 0]), self.movekey+[True], pos_elements))
         self.pos += self.diff
         
     
