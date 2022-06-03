@@ -12,8 +12,8 @@ class Common:
     def leftmove(self, keepflag):
         return np.array([-1, 0]) if keepflag else np.array([0, 0])
 
-    def fall(self, keepflag):
-        return np.array([0, 1]) if keepflag else np.array([0, 0])
+    def fall(self):
+        return np.array([0, 1])
     
     def guard(self):
         return
