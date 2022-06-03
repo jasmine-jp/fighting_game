@@ -10,9 +10,10 @@ player1 = Player(
     [0, common.window_y-20],
     [
         pyxel.KEY_E,
-        pyxel.KEY_X,
         pyxel.KEY_F,
-        pyxel.KEY_S
+        pyxel.KEY_S,
+        pyxel.KEY_X,
+        pyxel.KEY_D
     ]
 )
 
@@ -20,9 +21,10 @@ player2 = Player(
     [common.window_x-20, common.window_y-20],
     [
         pyxel.KEY_I,
-        pyxel.KEY_M,
         pyxel.KEY_L,
-        pyxel.KEY_J
+        pyxel.KEY_J,
+        pyxel.KEY_M,
+        pyxel.KEY_K
     ]
 )
 
