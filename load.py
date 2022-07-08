@@ -1,11 +1,11 @@
-from itertools import count
 import pyxel
 
 from common import *
 
 class Load:
-    def __init__(self, first_pos):
+    def __init__(self, first_pos, keyboards):
         self.direct = 'RIGHT' if first_pos < window_x/2 else 'LEFT'
+        self.keyboards = keyboards
         self.body = {
             'UP': [0, 0],
             'RIGHT': [bodysize, 0],
@@ -15,17 +15,24 @@ class Load:
             'ATTACKLEFT': [[bodysize*i, 0] for i in range(5, 8)],
             'ATTACKRIGHT': [[bodysize*i, 0] for i in range(8, 11)]
         }
+        self.keyboards_bool = {
+            'UP': pyxel.btn(self.keyboards['UP']),
+            'RIGHT': pyxel.btn(self.keyboards['RIGHT']),
+            'LEFT': pyxel.btn(self.keyboards['LEFT']),
+            'GUARD': pyxel.btn(self.keyboards['GUARD']),
+            'ATTACK': pyxel.btnp(self.keyboards['ATTACK']) and not pyxel.btn(self.keyboards['GUARD'])
+        }
         self.count = -1
         pyxel.load('./src/resource.pyxres')
     
-    def createKeyMap(self, keyboards):
+    def createKeyMap(self):
         o = np.array([0, 0])
         self.keyboards_bool = {
-            'UP': pyxel.btn(keyboards['UP']),
-            'RIGHT': pyxel.btn(keyboards['RIGHT']),
-            'LEFT': pyxel.btn(keyboards['LEFT']),
-            'GUARD': pyxel.btn(keyboards['GUARD']),
-            'ATTACK': pyxel.btnp(keyboards['ATTACK']) and not pyxel.btn(keyboards['GUARD'])
+            'UP': pyxel.btn(self.keyboards['UP']),
+            'RIGHT': pyxel.btn(self.keyboards['RIGHT']),
+            'LEFT': pyxel.btn(self.keyboards['LEFT']),
+            'GUARD': pyxel.btn(self.keyboards['GUARD']),
+            'ATTACK': pyxel.btnp(self.keyboards['ATTACK']) and not pyxel.btn(self.keyboards['GUARD'])
         }
         move = {
             'UP': jump(),
