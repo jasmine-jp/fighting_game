@@ -7,9 +7,7 @@ class Player:
     def __init__(self, first_pos, hp_bar_pos, keyboards):
         self.load = Load(first_pos, keyboards)
         self.pos = np.array([first_pos, window_y-bodysize])
-        self.keyboards = keyboards
-        self.hp = 5
-        self.hp_bar_pos = hp_bar_pos
+        self.hp, self.keyboards, self.hp_bar_pos = 5, keyboards, hp_bar_pos
         self.hitbox = np.array([bodysize, -bodysize])+self.pos
         self.upperleft = np.array([self.pos[0], self.hitbox[1]])
         self.lowerright = np.array([self.hitbox[0], self.pos[1]])
@@ -22,12 +20,7 @@ class Player:
     def draw(self):
         u, v = self.load.decideBody(self.pos)
         pyxel.blt(self.pos[0], self.pos[1], 0, u, v, bodysize, bodysize, 0)
-        if self.hp == 5:
-            col = 5
-        elif self.hp == 1:
-            col = 8
-        else:
-            col = 10
+        col = 5 if self.hp == 5 else 8 if self.hp == 1 else 10
         pyxel.rect(self.hp_bar_pos, 10, self.hp*10, 10, col)
     
     def attack(self, opponent):

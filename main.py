@@ -4,7 +4,6 @@ from command import Command
 from common import window_x, window_y
 
 pyxel.init(window_x, window_y)
-
 command = Command()
 
 def update():

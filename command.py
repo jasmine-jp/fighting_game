@@ -16,7 +16,6 @@ class Command:
                 'ATTACK': pyxel.KEY_D
             }
         )
-
         self.player2 = Player(
             window_x-16*4, window_x-5*10-10,
             {
