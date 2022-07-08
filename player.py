@@ -1,52 +1,54 @@
 import pyxel
-import numpy as np
 
 from load import Load
-from common import Common
+from common import *
 
 class Player:
-    def __init__(self, first_pos, hp_bar_pos, keys):
+    def __init__(self, first_pos, hp_bar_pos, keyboards):
         self.load = Load()
-        self.common = Common()
-        self.pos = np.array([first_pos, self.common.window_y-self.load.bodysize])
-        self.max_x, self.max_y = np.array([self.common.window_x, self.common.window_y])-self.load.bodysize
-        self.keys = keys
-        self.max_jumpheight = self.load.bodysize*2
+        self.pos = np.array([first_pos, window_y-bodysize])
+        self.max_x, self.max_y = np.array([window_x, window_y])-bodysize
+        self.keyboards = keyboards
         self.hp = 5
+        self.direct = 'RIGHT' if self.pos[0] < window_x/2 else 'LEFT'
         self.hp_bar_pos = hp_bar_pos
-        self.hitbox = np.array([self.load.bodysize, -self.load.bodysize])+self.pos
+        self.hitbox = np.array([bodysize, -bodysize])+self.pos
         self.upperleft = np.array([self.pos[0], self.hitbox[1]])
         self.lowerright = np.array([self.hitbox[0], self.pos[1]])
-        self.jumpflame = 0
     
     def update(self, opponent):
-        self.movekey = list(map(lambda x: pyxel.btn(x), self.keys[:3]))+[self.pos[1] < self.max_y]
-        self.commandkey = [pyxel.btn(self.keys[3]), pyxel.btnp(self.keys[4]), True]
-        if pyxel.btnp(self.keys[0]):
-            self.jumpflame = pyxel.frame_count
-        self.movekey[0] = self.movekey[0] and pyxel.frame_count - self.jumpflame < 75
-        pos_elements = [
-            self.common.jump(self.pos[1] > self.max_y-self.max_jumpheight),
-            self.common.rightmove(self.pos[0] != self.max_x),
-            self.common.leftmove(self.pos[0] != 0),
-            self.common.fall()
-        ]
-        self.diff = sum(map(lambda c, p: p if c else np.array([0, 0]), self.movekey, pos_elements))
-        self.pos += self.diff
+        self.pos += self.load.createKeyMap(self.keyboards)
+        self.pos = self.pos.clip([0, window_y-bodysize*2], [window_x-bodysize, window_y-bodysize])
         self.attack(opponent)
     
     def draw(self):
-        row, num = 0, (self.movekey+self.commandkey).index(True)
-        u, v = self.load.body[row][num]
-        bodynum, bodysize = self.load.bodynum, self.load.bodysize
-        pyxel.blt(self.pos[0], self.pos[1], bodynum, u, v, bodysize, bodysize, 0)
+        u, v = self.decideDirect()
+        pyxel.blt(self.pos[0], self.pos[1], 0, u, v, bodysize, bodysize, 0)
         pyxel.rect(self.hp_bar_pos, 10, self.hp*10, 10, 11)
     
     def attack(self, opponent):
-        self.hitbox = np.array([self.load.bodysize, -self.load.bodysize])+self.pos
+        self.hitbox = np.array([bodysize, -bodysize])+self.pos
         self.upperleft = np.array([self.pos[0], self.hitbox[1]])
         self.lowerright = np.array([self.hitbox[0], self.pos[1]])
         if np.all(opponent.upperleft <= self.lowerright) and np.all(self.upperleft <= opponent.lowerright):
-            if self.commandkey[1]:
-                if not opponent.commandkey[0]:
+            if self.load.keyboards_bool['ATTACK']:
+                if not opponent.load.keyboards_bool['GUARD']:
                     opponent.hp -= 1
+    
+    def decideDirect(self):
+        s = 'RIGHT' if self.direct == 'LEFT' else 'LEFT'
+        if self.load.keyboards_bool[s]:
+            self.direct = s
+
+        if self.load.keyboards_bool['GUARD']:
+            u, v = self.load.body['GUARD']
+        elif self.load.keyboards_bool['ATTACK']:
+            u, v = self.load.body['ATTACK'+self.direct][0]
+        else:
+            if self.load.keyboards_bool['UP']:
+                u, v = self.load.body['UP']
+            elif self.pos[1] != window_y-bodysize:
+                u, v = self.load.body['DOWN']
+            else:
+                u, v = self.load.body[self.direct]
+        return u, v

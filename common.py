@@ -1,16 +1,16 @@
 import numpy as np
 
-class Common:
-    window_x, window_y = 160, 120
+window_x, window_y = 256, 128
+bodysize = 16
 
-    def jump(self, keepflag):
-        return np.array([0, -2]) if keepflag else np.array([0, 0])
-    
-    def rightmove(self, keepflag):
-        return np.array([1, 0]) if keepflag else np.array([0, 0])
-    
-    def leftmove(self, keepflag):
-        return np.array([-1, 0]) if keepflag else np.array([0, 0])
+def jump():
+    return np.array([0, -2])
 
-    def fall(self):
-        return np.array([0, 1])
+def rightmove():
+    return np.array([1, 0])
+
+def leftmove():
+    return np.array([-1, 0])
+
+def fall():
+    return np.array([0, 1])
