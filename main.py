@@ -19,7 +19,7 @@ def draw():
     elif command.phase == 'start':
         command.player1.draw()
         command.player2.draw()
-    if command.player1.hp <= 0 or command.player2.hp <= 0 or command.phase == 'end':
+    if command.player1.hp <= 0 or command.player2.hp <= 0:
         command.gameover()
 
 pyxel.run(update, draw)
