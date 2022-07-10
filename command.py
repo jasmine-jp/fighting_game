@@ -35,7 +35,8 @@ class Command:
     
     def gameover(self):
         self.phase = 'end'
-        pyxel.text(110, 55, 'GAME OVER', 0)
+        s = 'PLAYER1 WIN !!!' if self.player2.hp <= 0 else 'PLAYER1 WIN !!!'
+        pyxel.text(100, 55, s, 0)
         pyxel.text(84, 70, 'please press space key', 0)
         if pyxel.btnp(pyxel.KEY_SPACE):
             self.__init__()
